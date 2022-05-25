@@ -1,5 +1,3 @@
-package crudJava;
-
 class Employee {
     private int empID;
     private String employeeName;

@@ -1,4 +1,3 @@
-package crudJava;
 import java.util.*;
 
 public class Main implements Crud {
@@ -20,68 +19,28 @@ public class Main implements Crud {
             switch (ch) {
 
                 case 1:
-                    arrEmployees.add(addEmployee());
+                    arrEmployees.add(Crud.addEmployee());
                     break;
 
                 case 2:
-                    readEmployees();
+                    Crud.readEmployees(arrEmployees);
                     break;
 
                 case 3:
-                    searchEmployee();
+                    Crud.searchEmployee(arrEmployees);
                     break;
 
                 case 4:
-                    found = false;
-                    System.out.println("Insira o ID do FUNCIONARIO: ");
-                    empNum = scann.nextInt();
-                    System.out.println("_____________________________________");
-                    i = arrEmployees.iterator();
-                    while (i.hasNext()) {
-                        Employee e = i.next();
-                        if (e.getEmpID() == empNum) {
-                            i.remove();
-                            found = true;
-                        }
-                    }
-                    if (!found) {
-                        System.out.println("FUNCIONARIO não encontrado");
-                    } else {
-                        System.out.println("FUNCIONARIO deletado com sucesso");
-                    }
-                    System.out.println("_____________________________________");
+                    Crud.deleteEmployee(arrEmployees);
                     break;
 
                 case 5:
-                    found = false;
-                    System.out.println("Insira o ID do FUNCIONARIO: ");
-                    empNum = scann.nextInt();
-                    System.out.println("_____________________________________");
-                    ListIterator<Employee> li = arrEmployees.listIterator();
-                    /*while (li.hasNext()) {
-                        Employee e = li.next();
-                        if (e.getEmpID() == empNum) {
-                            System.out.println("Insira o novo nome do FUNCIONARIO: ");
-                            eName = scannString.nextLine();
-                            System.out.println("Insira o novo salário do FUNCIONARIO: ");
-                            eSalary = scann.nextInt();
-
-                            eNum = empNum;
-                            li.set(new Employee(eNum, eName, eSalary));
-                            found = true;
-                        }
-                    }*/
-                    if (!found) {
-                        System.out.println("FUNCIONARIO não encontrado");
-                    } else {
-                        System.out.println("FUNCIONARIO atualizado com sucesso");
-                    }
-                    System.out.println("_____________________________________");
+                    Crud.updateEmployee(arrEmployees);
                     break;
 
             }
         } while (ch != 0);
 
-        scann.close();
+        //scann.close();
     }
 }
