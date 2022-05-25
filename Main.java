@@ -1,5 +1,4 @@
 package crudJava;
-
 import java.util.*;
 
 public class Main implements Crud {
@@ -21,36 +20,15 @@ public class Main implements Crud {
             switch (ch) {
 
                 case 1:
-                    arrEmployees.add(Crud.addEmployee());
+                    arrEmployees.add(addEmployee());
                     break;
 
                 case 2:
-                    System.out.println("_____________________________________");
-                    Iterator<Employee> i = arrEmployees.iterator();
-                    while (i.hasNext()) {
-                        Employee e = i.next();
-                        System.out.println(e);
-                    }
-                    System.out.println("_____________________________________");
+                    readEmployees();
                     break;
 
                 case 3:
-                    boolean found = false;
-                    System.out.println("Insira o ID de busca: ");
-                    int empNum = scann.nextInt();
-                    System.out.println("_____________________________________");
-                    i = arrEmployees.iterator();
-                    while (i.hasNext()) {
-                        Employee e = i.next();
-                        if (e.getEmpID() == empNum) {
-                            System.out.println(e);
-                            found = true;
-                        }
-                    }
-                    if (!found) {
-                        System.out.println("FUNCIONARIO não encontrado");
-                    }
-                    System.out.println("_____________________________________");
+                    searchEmployee();
                     break;
 
                 case 4:
