@@ -1,20 +1,72 @@
-import java.util.*;
+import java.util.Scanner;
+import java.lang.reflect.Array;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public interface Crud {
+
+    public static void showMenu() {
+        System.out.println("\n");
+        System.out.println("1.INSERIR NOVO FUNCIONARIO");
+        System.out.println("2.EXIBIR FUNCIONARIO");
+        System.out.println("3.PROCURAR FUNCIONARIO");
+        System.out.println("4.DELETAR FUNCIONARIO");
+        System.out.println("5.ATUALIZAR DADOS DO FUNCIONARIO");
+        System.out.println("0.SAIR");
+        System.out.printf("\nDigite o numero da opção: ");
+    }
 
     public static Employee addEmployee() {
 
         Scanner scannAdd = new Scanner(System.in);
-        System.out.println("Insira o ID do funcionário: ");
 
-        int eNum = Integer.parseInt(scannAdd.nextLine());
-        System.out.println("Insira o nome do funcionário: ");
-        String eName = scannAdd.nextLine();
-        System.out.println("Insira o salário do funcionário: ");
-        float eSalary = Float.parseFloat(scannAdd.nextLine());
+        int eNum = 0;
+        float eSalary = 0;
+        String eName = "sample";
 
-        return new Employee(eNum, eName, eSalary);
-        
+        return new Employee(addID(eNum, scannAdd), addName(eName, scannAdd), addSalary(eSalary, scannAdd));
+    }
+
+    private static int addID(int eNum, Scanner scannAdd) {
+        try {
+            System.out.printf("\nInsira o ID do funcionário: ");
+            eNum = Integer.parseInt(scannAdd.nextLine());
+            return eNum;
+        } catch (NumberFormatException e) {
+            System.out.println("\nVocê não digitou um número. Tente novamente!");
+            return addID(eNum, scannAdd);
+        }
+    }
+
+    private static String addName(String eName, Scanner scannAdd) {
+        System.out.printf("\nInsira o nome do funcionário: ");
+        eName = scannAdd.nextLine();
+        Pattern pattern = Pattern.compile("[0-9]", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(eName);
+        boolean matchFound = matcher.find();
+        if(matchFound) {
+          return addName(eName, scannAdd);
+        } else {
+          return eName;
+        }        
+    }
+
+    private static float addSalary(float eSalary, Scanner scannAdd) {
+        try {
+            System.out.printf("\nInsira o salário (mensal) do funcionário: ");
+            eSalary = Float.parseFloat(scannAdd.nextLine());
+            if (eSalary < 810) {
+                System.out.println("\nPor favor insira um valor maior ou correspondente ao mínimo diário");
+                return addSalary(eSalary, scannAdd);
+            }
+            return eSalary;
+        } catch (NumberFormatException e) {
+            System.out.println("\nVocê não digitou um número. Tente novamente!");
+            return addSalary(eSalary, scannAdd);
+        }
     }
 
     public static void readEmployees(List arrEmployees) {
@@ -38,7 +90,7 @@ public interface Crud {
         System.out.println("Insira o ID de busca: ");
         int empNum = scannSearch.nextInt();
         System.out.println("_____________________________________");
-        
+
         while (i.hasNext()) {
             Employee e = i.next();
             if (e.getEmpID() == empNum) {

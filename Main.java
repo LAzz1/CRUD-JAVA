@@ -1,23 +1,23 @@
 import java.util.*;
 
 public class Main implements Crud {
+    
     public static void main(String[] args) {
 
         List<Employee> arrEmployees = new ArrayList<Employee>();
         Scanner scann = new Scanner(System.in);
-        int ch;
+        int ch = 0;
         do {
-            System.out.println("\n");
-            System.out.println("1.INSERIR NOVO FUNCIONARIO");
-            System.out.println("2.EXIBIR FUNCIONARIO");
-            System.out.println("3.PROCURAR FUNCIONARIO");
-            System.out.println("4.DELETAR FUNCIONARIO");
-            System.out.println("5.ATUALIZAR DADOS DO FUNCIONARIO");
-            System.out.println("\nDigite o numero da opção: ");
-            ch = Integer.parseInt(scann.nextLine());
+            
+            Crud.showMenu();
+            try {
+                ch = Integer.parseInt(scann.nextLine());
+            } catch (Exception e) {
+                ch = 10;
+                System.out.println("\nVocê não digitou um número válido. Tente novamente!");
+            }
 
             switch (ch) {
-
                 case 1:
                     arrEmployees.add(Crud.addEmployee());
                     break;
@@ -41,6 +41,6 @@ public class Main implements Crud {
             }
         } while (ch != 0);
 
-        //scann.close();
+        scann.close();
     }
 }
