@@ -1,4 +1,5 @@
-class Employee {
+package functions;
+public class Employee {
     private int empID;
     private String employeeName;
     private float salary;
