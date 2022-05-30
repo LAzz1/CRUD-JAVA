@@ -1,3 +1,4 @@
+package crudJava;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -21,5 +22,10 @@ public class Conexao {
     public static void enviar(Socket socket, String textoRequisicao) throws IOException {
         OutputStream out = socket.getOutputStream();
         out.write(textoRequisicao.getBytes());
+    }
+
+    public static void sendEmployee(Socket socket, Employee employee) throws IOException {
+        OutputStream out = socket.getOutputStream();
+        //out.
     }
 }

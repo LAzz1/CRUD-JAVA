@@ -1,3 +1,4 @@
+package crudJava;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -6,9 +7,10 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import functions.*;
 
-public class Server {
+public class Server implements Crud{
     Socket socketClient;
     ServerSocket serversocket;
 
@@ -53,22 +55,27 @@ public class Server {
                             break;
                         case 1:
                             Conexao.enviar(socketClient, "Voce escolheu adicionar um novo funcionario");
+                            arrEmployees.add(Crud.insertEmployee());
                             break;
 
                         case 2:
                             Conexao.enviar(socketClient, "Voce escolheu visualizar os funcionarios");
+                            Crud.readEmployees(arrEmployees);
                             break;
 
                         case 3:
                             Conexao.enviar(socketClient, "Voce escolheu procurar por um funcionario");
+                            Crud.searchEmployee(arrEmployees);
                             break;
 
                         case 4:
                             Conexao.enviar(socketClient, "Voce escolheu deletar um funcionario");
+                            Crud.deleteEmployee(arrEmployees);
                             break;
 
                         case 5:
                             Conexao.enviar(socketClient, "Voce escolheu atualizar um funcionario");
+                            Crud.updateEmployee(arrEmployees);
                             break;
                         default:
                         Conexao.enviar(socketClient,"Opcao invalida, escolha um valor entre 0 e 5");

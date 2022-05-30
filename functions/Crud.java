@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public interface Crud {
+    Employee emp = new Employee(0, "teste", 0);
 
     public static void showMenu() {
         System.out.println("\n");
@@ -19,15 +20,20 @@ public interface Crud {
         System.out.printf("\nDigite o numero da opcao: ");
     }
 
-    public static Employee addEmployee() {
+    public static Employee insertEmployee() {
+        return Crud.emp;
+    }
+
+    public static void addEmployee() {
 
         Scanner scannAdd = new Scanner(System.in);
-
         int eNum = 0;
         float eSalary = 0;
         String eName = "sample";
 
-        return new Employee(addID(eNum, scannAdd), addName(eName, scannAdd), addSalary(eSalary, scannAdd));
+        Crud.emp.setEmpID(addID(eNum, scannAdd));
+        Crud.emp.setSalary(addSalary(eSalary, scannAdd));
+        Crud.emp.setEmployeeName(addName(eName, scannAdd));
     }
 
     private static int addID(int eNum, Scanner scannAdd) {
