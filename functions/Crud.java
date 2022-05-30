@@ -1,5 +1,9 @@
 package functions;
 import java.util.Scanner;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -7,7 +11,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public interface Crud {
+/*  DatagramSocket socket = new DatagramSocket();
+    InetAddress address = InetAddress.getByName("localhost");
+    List<Employee> arrEmployees = new ArrayList<Employee>();
+    int port = 5252;
+    byte saida[];
+    saida = texto.getBytes();
 
+    DatagramPacket datagram = new DatagramPacket(saida, saida.length, address, port);
+    // connect() method
+    socket.connect(address, port);
+
+
+    DatagramPacket datagram = new DatagramPacket(saida, saida.length, address, port);
+    // send() method
+    socket.send(datagram);
+*/
     public static void showMenu() {
         System.out.println("\n");
         System.out.println("1.INSERIR NOVO FUNCIONARIO");
@@ -27,6 +46,7 @@ public interface Crud {
         float eSalary = 0;
         String eName = "sample";
 
+        //socket.send( new Employee(addID(eNum, scannAdd), addName(eName, scannAdd), addSalary(eSalary, scannAdd)));
         return new Employee(addID(eNum, scannAdd), addName(eName, scannAdd), addSalary(eSalary, scannAdd));
     }
 
