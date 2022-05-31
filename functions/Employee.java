@@ -4,7 +4,7 @@ public class Employee {
     private String employeeName;
     private float salary;
 
-    Employee(int empID, String employeeName, float salary) {
+    public Employee(int empID, String employeeName, float salary) {
         this.empID = empID;
         this.employeeName = employeeName;
         this.salary = salary;

@@ -1,20 +1,18 @@
 package crudJava;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import functions.*;
 
-public class Server implements Crud{
+public class Server implements Crud {
     Socket socketClient;
     ServerSocket serversocket;
 
-    public boolean connect() {
+    private boolean connect() {
         try {
             socketClient = serversocket.accept(); // fase de conexao
             return true;
@@ -33,10 +31,10 @@ public class Server implements Crud{
         }
     }
 
-    public void rodarServidor() throws Exception {
+    private void rodarServidor() throws Exception {
         List<Employee> arrEmployees = new ArrayList<Employee>();
-        String textoRecebido = "";
-        String textoEnviado = "Olá, Cliente";
+        Employee emp;
+        int escolhaRecebida;
         Scanner input = new Scanner(System.in);
 
         serversocket = new ServerSocket(9600);
@@ -45,22 +43,22 @@ public class Server implements Crud{
         while (true) {
             if (connect()) {
                 try {
-                    textoRecebido = Conexao.receber(socketClient);
-                    int ch = Integer.parseInt(textoRecebido);
-                    System.out.println("Cliente enviou: " + ch);
-                    switch (ch) {
+                    escolhaRecebida = Conexao.receberInt(socketClient);
+                    System.out.println("Cliente enviou: " + escolhaRecebida);
+                    switch (escolhaRecebida) {
                         case 0:
                             Conexao.enviar(socketClient, "Voce escolheu sair do programa");
                             socketClient.close();
                             break;
+
                         case 1:
                             Conexao.enviar(socketClient, "Voce escolheu adicionar um novo funcionario");
-                            arrEmployees.add(Crud.insertEmployee());
+                            arrEmployees.add(emp = new Employee(Conexao.receberInt(socketClient), Conexao.receber(socketClient), Conexao.receberFloat(socketClient)));
                             break;
 
                         case 2:
                             Conexao.enviar(socketClient, "Voce escolheu visualizar os funcionarios");
-                            Crud.readEmployees(arrEmployees);
+                            Conexao.enviar(socketClient, Crud.readEmployees(arrEmployees));
                             break;
 
                         case 3:
@@ -78,13 +76,13 @@ public class Server implements Crud{
                             Crud.updateEmployee(arrEmployees);
                             break;
                         default:
-                        Conexao.enviar(socketClient,"Opcao invalida, escolha um valor entre 0 e 5");
-                        break;
+                            Conexao.enviar(socketClient, "Opcao invalida, escolha um valor entre 0 e 5");
+                            break;
                     }
                     socketClient.close();
 
                 } catch (Exception e) {
-                    String errorMsg = "\nError, envie apenas numeros entre 0 e 5";
+                    String errorMsg = e.toString();
                     Conexao.enviar(socketClient, errorMsg);
                     socketClient.close();
                 }

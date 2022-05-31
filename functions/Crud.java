@@ -1,13 +1,17 @@
 package functions;
 import java.util.Scanner;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import crudJava.Conexao;
+import crudJava.Server;
+
 public interface Crud {
-    Employee emp = new Employee(0, "teste", 0);
 
     public static void showMenu() {
         System.out.println("\n");
@@ -20,34 +24,30 @@ public interface Crud {
         System.out.printf("\nDigite o numero da opcao: ");
     }
 
-    public static Employee insertEmployee() {
-        return Crud.emp;
-    }
-
-    public static void addEmployee() {
+    /*
+    public static Employee addEmployee() {
 
         Scanner scannAdd = new Scanner(System.in);
-        int eNum = 0;
-        float eSalary = 0;
-        String eName = "sample";
 
-        Crud.emp.setEmpID(addID(eNum, scannAdd));
-        Crud.emp.setSalary(addSalary(eSalary, scannAdd));
-        Crud.emp.setEmployeeName(addName(eName, scannAdd));
+        return new Employee(addID(scannAdd),addName(scannAdd),addSalary(scannAdd));
     }
+    */
 
-    private static int addID(int eNum, Scanner scannAdd) {
+    public static int addID(Scanner scannAdd) {
+        //Caso o codigo quebre, redeclarar as variaveis eNum, eName e eSalary nas funcoes "Add"
+        int eNum;
         try {
             System.out.printf("\nInsira o ID do funcionário: ");
             eNum = Integer.parseInt(scannAdd.nextLine());
             return eNum;
         } catch (NumberFormatException e) {
             System.out.println("\nO ID deve conter apenas numeros. Tente um valor valido.");
-            return addID(eNum, scannAdd);
+            return addID(scannAdd);
         }
     }
 
-    private static String addName(String eName, Scanner scannAdd) {
+    public static String addName(Scanner scannAdd) {
+        String eName;
         System.out.printf("\nInsira o nome do funcionário: ");
         eName = scannAdd.nextLine();
         Pattern pattern = Pattern.compile("[0-9]", Pattern.CASE_INSENSITIVE);
@@ -55,40 +55,41 @@ public interface Crud {
         boolean matchFound = matcher.find();
         if (matchFound) {
             System.out.println("\nO nome dos funcionários não devem conter números.");
-            return addName(eName, scannAdd);
+            return addName(scannAdd);
         } else {
             return eName;
         }
     }
 
-    private static float addSalary(float eSalary, Scanner scannAdd) {
+    public static float addSalary(Scanner scannAdd) {
+        float eSalary;
         try {
             System.out.printf("\nInsira o valor mensal pago ao funcionário: ");
             eSalary = Float.parseFloat(scannAdd.nextLine());
             if (eSalary < 810) {
                 System.out.println("\nPor favor insira um valor correspondente ou maior ao minimo mensal (R$810).");
-                return addSalary(eSalary, scannAdd);
+                return addSalary(scannAdd);
             }
             return eSalary;
         } catch (NumberFormatException e) {
             System.out.println("\nPara o salário é valido apenas números. Tente novamente.");
-            return addSalary(eSalary, scannAdd);
+            return addSalary(scannAdd);
         }
     }
 
-    public static void readEmployees(List arrEmployees) {
+    public static String readEmployees(List<Employee> arrEmployees) {
 
         Iterator<Employee> i = arrEmployees.iterator();
+        StringBuilder s = new StringBuilder();
 
-        System.out.println("_____________________________________");
         while (i.hasNext()) {
             Employee e = i.next();
-            System.out.println(e);
+            s.append(String.valueOf(e));
         }
-        System.out.println("_____________________________________");
+        return s.toString();
     }
 
-    public static void searchEmployee(List arrEmployees) {
+    public static void searchEmployee(List<Employee> arrEmployees) {
 
         Iterator<Employee> i = arrEmployees.iterator();
         Scanner scannSearch = new Scanner(System.in);
@@ -116,7 +117,7 @@ public interface Crud {
         }
     }
 
-    public static void deleteEmployee(List arrEmployees) {
+    public static void deleteEmployee(List<Employee> arrEmployees) {
 
         Scanner scannDelete = new Scanner(System.in);
         boolean found = false;
@@ -145,7 +146,7 @@ public interface Crud {
         }
     }
 
-    public static void updateEmployee(List arrEmployees) {
+    public static void updateEmployee(List<Employee> arrEmployees) {
         Scanner scannUpdate = new Scanner(System.in);
         boolean found = false;
         try{

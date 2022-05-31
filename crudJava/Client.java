@@ -1,46 +1,68 @@
 package crudJava;
+
+import java.io.IOException;
+import java.lang.Runnable;
 import java.net.Socket;
 import java.util.Scanner;
-import java.util.concurrent.ExecutorCompletionService;
 import functions.*;
 
-public class Client {
+public class Client implements Crud{
     Socket socket;
 
     public void comunicarComServidor() throws Exception {
-        String textoRequisicao = "Conexao estabelecida";
         String textoRecebido = "";
-        socket = new Socket("localhost", 9600);
         int ch = 10;
 
-        Scanner input = new Scanner(System.in);
-        Crud.showMenu();
-        ch = Integer.parseInt(input.nextLine());
+        do {
+            socket = new Socket("localhost", 9600);
+            Employee emp;
 
-        switch (ch) {
-            case 1:
-                Crud.addEmployee();
-                break;
-        
-            default:
-                break;
-        }
-        // Enviar mensagem para o servidor
-        Conexao.enviar(socket, textoRequisicao);
+            Scanner input = new Scanner(System.in);
 
-        // Receber mensagem do servidor
-        textoRecebido = Conexao.receber(socket);
+            Crud.showMenu();
 
-        System.out.println("Resposta do Servidor:\n" + textoRecebido);
+            try {
+                ch = Integer.parseInt(input.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("\nYou should only input numbers!");
+            }
+
+            // Enviar mensagem para o servidor
+            Conexao.enviarInt(socket, ch);
+
+            // Receber mensagem do servidor
+            textoRecebido = Conexao.receber(socket);
+
+            System.out.println("Resposta do Servidor:\n" + textoRecebido);
+
+            switch (ch) {
+                case 0:
+                    System.out.println("Exitting...");
+                    break;
+                case 1:
+                    Conexao.enviarInt(socket, Crud.addID(input));
+                    Conexao.enviar(socket, Crud.addName(input));
+                    Conexao.enviarFloat(socket, Crud.addSalary(input));
+                    break;
+                case 2:
+                    textoRecebido = Conexao.receber(socket);
+                    System.out.println("------------------------");
+                    System.out.println(textoRecebido);
+                    System.out.println("------------------------");
+                    break;
+                default:
+                    break;
+            }
+        } while (ch != 0);
+
     }
-
 
     public static void main(String[] args) {
         try {
             Client cliente = new Client();
             cliente.comunicarComServidor();
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-    } 
+    }
 }
