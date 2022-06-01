@@ -11,11 +11,11 @@ public class Client implements Crud{
 
     public void comunicarComServidor() throws Exception {
         String textoRecebido = "";
+        //char[] charsRecebidos = new char[3];
         int ch = 10;
 
         do {
             socket = new Socket("localhost", 9600);
-            Employee emp;
 
             Scanner input = new Scanner(System.in);
 
