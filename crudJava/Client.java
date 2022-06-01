@@ -1,7 +1,5 @@
 package crudJava;
 
-import java.io.IOException;
-import java.lang.Runnable;
 import java.net.Socket;
 import java.util.Scanner;
 import functions.*;
@@ -11,7 +9,7 @@ public class Client implements Crud{
 
     public void comunicarComServidor() throws Exception {
         String textoRecebido = "";
-        //char[] charsRecebidos = new char[3];
+        String[] textoSplit;
         int ch = 10;
 
         do {
@@ -46,9 +44,13 @@ public class Client implements Crud{
                     break;
                 case 2:
                     textoRecebido = Conexao.receber(socket);
-                    System.out.println("------------------------");
-                    System.out.println(textoRecebido);
-                    System.out.println("------------------------");
+                    System.out.println("-----------------------------------");
+                    System.out.println("ID\tName\t\tSalary");
+                    textoSplit = textoRecebido.split("\\[|,|\\]");
+                    for(String t:textoSplit){
+                        System.out.println(t.trim());
+                    }
+                    System.out.println("-----------------------------------");
                     break;
                 default:
                     break;

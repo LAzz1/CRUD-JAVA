@@ -1,15 +1,11 @@
 package functions;
+
 import java.util.Scanner;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import crudJava.Conexao;
-import crudJava.Server;
 
 public interface Crud {
 
@@ -24,17 +20,9 @@ public interface Crud {
         System.out.printf("\nDigite o numero da opcao: ");
     }
 
-    /*
-    public static Employee addEmployee() {
-
-        Scanner scannAdd = new Scanner(System.in);
-
-        return new Employee(addID(scannAdd),addName(scannAdd),addSalary(scannAdd));
-    }
-    */
-
     public static int addID(Scanner scannAdd) {
-        //Caso o codigo quebre, redeclarar as variaveis eNum, eName e eSalary nas funcoes "Add"
+        // Caso o codigo quebre, redeclarar as variaveis eNum, eName e eSalary nas
+        // funcoes "Add"
         int eNum;
         try {
             System.out.printf("\nInsira o ID do funcionário: ");
@@ -84,7 +72,8 @@ public interface Crud {
 
         while (i.hasNext()) {
             Employee e = i.next();
-            s.append(String.valueOf(e));
+            s.append(String.valueOf(e.toString().split(".", 1)));
+            System.out.println(s.toString()); 
         }
         return s.toString();
     }
@@ -92,91 +81,96 @@ public interface Crud {
     public static void searchEmployee(List<Employee> arrEmployees) {
 
         Iterator<Employee> i = arrEmployees.iterator();
-        Scanner scannSearch = new Scanner(System.in);
-        boolean found = false;
-        try {
-            System.out.printf("Insira o ID de busca: ");
-            int empNum = scannSearch.nextInt();
+        //Try-with-resources no Scanner para prevenir resource leak, remover caso necessario
+        try (Scanner scannSearch = new Scanner(System.in)) {
+            boolean found = false;
+            try {
+                System.out.printf("Insira o ID de busca: ");
+                int empNum = scannSearch.nextInt();
 
-            System.out.println("_____________________________________");
+                System.out.println("_____________________________________");
 
-            while (i.hasNext()) {
-                Employee e = i.next();
-                if (e.getEmpID() == empNum) {
-                    System.out.println(e);
-                    found = true;
+                while (i.hasNext()) {
+                    Employee e = i.next();
+                    if (e.getEmpID() == empNum) {
+                        System.out.println(e);
+                        found = true;
+                    }
                 }
+                if (!found) {
+                    System.out.println("\nFuncionario não encontrado");
+                }
+                System.out.println("_____________________________________");
+            } catch (Exception e) {
+                System.out.println("\nOcorreu um erro na validação do ID. Tente novamente apenas com numeros.");
+                searchEmployee(arrEmployees);
             }
-            if (!found) {
-                System.out.println("\nFuncionario não encontrado");
-            }
-            System.out.println("_____________________________________");
-        } catch (Exception e) {
-            System.out.println("\nOcorreu um erro na validação do ID. Tente novamente apenas com numeros.");
-            searchEmployee(arrEmployees);
         }
     }
 
     public static void deleteEmployee(List<Employee> arrEmployees) {
+        //Try-with-resources no Scanner para prevenir resource leak, remover caso necessario
+        try (Scanner scannDelete = new Scanner(System.in)) {
+            boolean found = false;
+            try {
+                System.out.printf("Insira o ID do funcionario: ");
+                int empNum = Integer.parseInt(scannDelete.nextLine());
+                System.out.println("_____________________________________");
+                Iterator<Employee> i = arrEmployees.iterator();
 
-        Scanner scannDelete = new Scanner(System.in);
-        boolean found = false;
-        try{
-        System.out.printf("Insira o ID do funcionario: ");
-        int empNum = Integer.parseInt(scannDelete.nextLine());
-        System.out.println("_____________________________________");
-        Iterator<Employee> i = arrEmployees.iterator();
-
-        while (i.hasNext()) {
-            Employee e = i.next();
-            if (e.getEmpID() == empNum) {
-                i.remove();
-                found = true;
+                while (i.hasNext()) {
+                    Employee e = i.next();
+                    if (e.getEmpID() == empNum) {
+                        i.remove();
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    System.out.println("Funcionario não encontrado");
+                } else {
+                    System.out.println("Funcionario deletado com sucesso");
+                }
+                System.out.println("_____________________________________");
+            } catch (Exception e) {
+                System.out.println("\nOcorreu um erro na validação do ID. Tente novamente apenas com numeros.");
+                deleteEmployee(arrEmployees);
             }
-        }
-        if (!found) {
-            System.out.println("Funcionario não encontrado");
-        } else {
-            System.out.println("Funcionario deletado com sucesso");
-        }
-        System.out.println("_____________________________________");
-        }catch (Exception e) {
-            System.out.println("\nOcorreu um erro na validação do ID. Tente novamente apenas com numeros.");
-            deleteEmployee(arrEmployees);
         }
     }
 
     public static void updateEmployee(List<Employee> arrEmployees) {
-        Scanner scannUpdate = new Scanner(System.in);
-        boolean found = false;
-        try{
-        System.out.printf("Insira o ID do funcionario: ");
-        int empNum = Integer.parseInt(scannUpdate.nextLine());
-        System.out.println("_____________________________________");
-        ListIterator<Employee> li = arrEmployees.listIterator();
+        //Try-with-resources no Scanner para prevenir resource leak, remover caso necessario
+        try (Scanner scannUpdate = new Scanner(System.in)) {
+            boolean found = false;
+            try {
+                System.out.printf("Insira o ID do funcionario: ");
+                int empNum = Integer.parseInt(scannUpdate.nextLine());
+                System.out.println("_____________________________________");
+                ListIterator<Employee> li = arrEmployees.listIterator();
 
-        while (li.hasNext()) {
-            Employee e = li.next();
-            if (e.getEmpID() == empNum) {
-                System.out.printf("Insira o novo nome do funcionario: ");
-                String eName = scannUpdate.nextLine();
-                System.out.printf("Insira o novo salário do funcionario: ");
-                float eSalary = Float.parseFloat(scannUpdate.nextLine());
+                while (li.hasNext()) {
+                    Employee e = li.next();
+                    if (e.getEmpID() == empNum) {
+                        System.out.printf("Insira o novo nome do funcionario: ");
+                        String eName = scannUpdate.nextLine();
+                        System.out.printf("Insira o novo salário do funcionario: ");
+                        float eSalary = Float.parseFloat(scannUpdate.nextLine());
 
-                int eNum = empNum;
-                li.set(new Employee(eNum, eName, eSalary));
-                found = true;
+                        int eNum = empNum;
+                        li.set(new Employee(eNum, eName, eSalary));
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    System.out.println("funcionario não encontrado");
+                } else {
+                    System.out.println("funcionario atualizado com sucesso");
+                }
+                System.out.println("_____________________________________");
+            } catch (Exception e) {
+                System.out.println("\nOcorreu um erro na validação do ID. Tente novamente apenas com numeros.");
+                updateEmployee(arrEmployees);
             }
         }
-        if (!found) {
-            System.out.println("funcionario não encontrado");
-        } else {
-            System.out.println("funcionario atualizado com sucesso");
-        }
-        System.out.println("_____________________________________");
-    }catch (Exception e) {
-        System.out.println("\nOcorreu um erro na validação do ID. Tente novamente apenas com numeros.");
-        updateEmployee(arrEmployees);
-    }
     }
 }

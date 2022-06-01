@@ -22,19 +22,7 @@ public class Employee {
         return employeeName;
     }
 
-    public void setEmpID(int empID) {
-        this.empID = empID;
-    }
-
-    public void setSalary(float salary) {
-        this.salary = salary;
-    }
-
-    public void setEmployeeName(String name) {
-        this.employeeName = name;
-    }
-
     public String toString() {
-        return empID + "" + employeeName + "" + salary;
+        return String.format("%d\t%s\tR$%.2f",this.empID,this.employeeName,this.salary);
     }
 }

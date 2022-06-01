@@ -5,7 +5,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import functions.*;
 
 public class Server implements Crud {
@@ -33,9 +32,8 @@ public class Server implements Crud {
 
     private void rodarServidor() throws Exception {
         List<Employee> arrEmployees = new ArrayList<Employee>();
-        Employee emp;
         int escolhaRecebida;
-        Scanner input = new Scanner(System.in);
+        //Scanner input = new Scanner(System.in);
 
         serversocket = new ServerSocket(9600);
         System.out.println("Servidor iniciado!");
@@ -53,12 +51,12 @@ public class Server implements Crud {
 
                         case 1:
                             Conexao.enviar(socketClient, "Voce escolheu adicionar um novo funcionario");
-                            arrEmployees.add(emp = new Employee(Conexao.receberInt(socketClient), Conexao.receber(socketClient), Conexao.receberFloat(socketClient)));
+                            arrEmployees.add(new Employee(Conexao.receberInt(socketClient), Conexao.receber(socketClient), Conexao.receberFloat(socketClient)));
                             break;
 
                         case 2:
                             Conexao.enviar(socketClient, "Voce escolheu visualizar os funcionarios");
-                            Conexao.enviar(socketClient, Crud.readEmployees(arrEmployees));
+                            Conexao.enviar(socketClient, arrEmployees.toString());
                             break;
 
                         case 3:
