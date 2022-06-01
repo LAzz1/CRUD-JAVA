@@ -1,9 +1,10 @@
-class Employee {
+package functions;
+public class Employee {
     private int empID;
     private String employeeName;
     private float salary;
 
-    Employee(int empID, String employeeName, float salary) {
+    public Employee(int empID, String employeeName, float salary) {
         this.empID = empID;
         this.employeeName = employeeName;
         this.salary = salary;
@@ -22,6 +23,6 @@ class Employee {
     }
 
     public String toString() {
-        return empID + "" + employeeName + "" + salary;
+        return String.format("%d\t%s\tR$%.2f",this.empID,this.employeeName,this.salary);
     }
 }
