@@ -1,16 +1,18 @@
 package crudJava;
 
+import java.io.EOFException;
+import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 import functions.*;
 
-public class Client implements Crud{
+public class Client implements Crud {
     Socket socket;
 
-    public void comunicarComServidor() throws Exception {
+    public void comunicarComServidor() throws UnknownHostException, IOException, InterruptedException {
         String textoRecebido = "";
-        String[] textoSplit;
-        int ch = 10;
+        int ch = 0;
 
         do {
             socket = new Socket("localhost", 9600);
@@ -31,27 +33,48 @@ public class Client implements Crud{
             // Receber mensagem do servidor
             textoRecebido = Conexao.receber(socket);
 
-            System.out.println("Resposta do Servidor:\n" + textoRecebido);
+            System.out.println("\nResposta do Servidor:\n" + textoRecebido);
 
             switch (ch) {
                 case 0:
                     System.out.println("Exitting...");
                     break;
+
                 case 1:
                     Conexao.enviarInt(socket, Crud.addID(input));
                     Conexao.enviar(socket, Crud.addName(input));
                     Conexao.enviarFloat(socket, Crud.addSalary(input));
                     break;
+
                 case 2:
                     textoRecebido = Conexao.receber(socket);
-                    System.out.println("-----------------------------------");
-                    System.out.println("ID\tName\t\tSalary");
-                    textoSplit = textoRecebido.split("\\[|,|\\]");
-                    for(String t:textoSplit){
-                        System.out.println(t.trim());
-                    }
-                    System.out.println("-----------------------------------");
+                    this.receiveEmployees(textoRecebido);
                     break;
+
+                case 3:
+                    Conexao.enviarInt(socket, Crud.searchEmployee(input));
+                    try {
+                        textoRecebido = Conexao.receber(socket);
+                        this.receiveEmployees(textoRecebido);
+                    } catch (EOFException e) {
+                        System.out.println("-----------------------------------");
+                        System.out.println("ID inválido. Tente novamente");
+                        System.out.println("-----------------------------------");
+                    }
+                    break;
+
+                case 4:
+                    Conexao.enviarInt(socket, Crud.searchEmployee(input));
+                    textoRecebido = Conexao.receber(socket);
+                    System.out.println(textoRecebido);
+                    break;
+
+                case 5:
+                    Conexao.enviarInt(socket, Crud.addID(input));
+                    Conexao.enviar(socket, Crud.addName(input));
+                    Conexao.enviarFloat(socket, Crud.addSalary(input));
+                    break;
+
                 default:
                     break;
             }
@@ -67,4 +90,15 @@ public class Client implements Crud{
             e.printStackTrace();
         }
     }
+
+    private void receiveEmployees(String textoRecebido) {
+        System.out.println("-----------------------------------");
+        System.out.println("ID\tName\t\tSalary");
+        String textoSplit[] = textoRecebido.split("\\[|,|\\]");
+        for (String t : textoSplit) {
+            System.out.println(t.trim());
+        }
+        System.out.println("-----------------------------------");
+    }
+
 }

@@ -23,6 +23,6 @@ public class Employee {
     }
 
     public String toString() {
-        return String.format("%d\t%s\tR$%.2f",this.empID,this.employeeName,this.salary);
+        return String.format("%d\t%s\t   R$%.2f",this.empID,this.employeeName,this.salary);
     }
 }
