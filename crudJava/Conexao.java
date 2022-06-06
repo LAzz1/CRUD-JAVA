@@ -24,23 +24,23 @@ public class Conexao {
 
     public static float receberFloat(Socket socket) throws IOException {
         DataInputStream dataIn = new DataInputStream(socket.getInputStream());
-        float doubleLido = dataIn.readFloat();
+        float floatLido = dataIn.readFloat();
 
-        return doubleLido;
+        return floatLido;
     }
 
-    public static void enviar(Socket socket, String textoRequisicao) throws IOException {
+    public static void enviar(Socket socket, String texto) throws IOException {
         DataOutputStream dout = new DataOutputStream(socket.getOutputStream());
-        dout.writeUTF(textoRequisicao);
+        dout.writeUTF(texto);
     }
 
-    public static void enviarInt(Socket socket, int integer) throws IOException {
+    public static void enviarInt(Socket socket, int numInt) throws IOException {
         OutputStream out = socket.getOutputStream();
-        out.write(integer);
+        out.write(numInt);
     }
 
-    public static void enviarFloat(Socket socket, float numDouble) throws IOException {
+    public static void enviarFloat(Socket socket, float numFloat) throws IOException {
         DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-        out.writeFloat(numDouble);
+        out.writeFloat(numFloat);
     }
 }

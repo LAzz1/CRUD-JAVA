@@ -4,19 +4,18 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
-import functions.*;
+import functions.CrudServer;
+import functions.Employee;
 
-public class Server implements Crud {
-    Socket socketClient;
-    ServerSocket serversocket;
+public class Server implements CrudServer {
+    Socket clientSocket;
+    ServerSocket serverSocket;
 
     private boolean connect() {
         try {
-            socketClient = serversocket.accept(); // fase de conexao
+            clientSocket = serverSocket.accept();
             return true;
         } catch (IOException e) {
             System.err.println("Nao fez conexao" + e.getMessage());
@@ -36,108 +35,72 @@ public class Server implements Crud {
     private void rodarServidor() throws Exception {
         List<Employee> arrEmployees = new ArrayList<Employee>();
         boolean found = false;
-        int escolhaRecebida; int empNum;
-        // Scanner input = new Scanner(System.in);
+        int escolhaRecebida; int empNum = 0;
 
-        serversocket = new ServerSocket(9600);
+        serverSocket = new ServerSocket(9600);
         System.out.println("Servidor iniciado!");
 
         while (true) {
             if (connect()) {
                 try {
-                    escolhaRecebida = Conexao.receberInt(socketClient);
-                    System.out.println("Cliente enviou: " + escolhaRecebida);
+                    escolhaRecebida = Conexao.receberInt(clientSocket);
                     switch (escolhaRecebida) {
                         case 0:
-                            Conexao.enviar(socketClient, "Voce escolheu sair do programa\n");
-                            socketClient.close();
+                            System.out.println("Cliente enviou: " + escolhaRecebida + " - SAIR");
+                            Conexao.enviar(clientSocket, "Você escolheu sair do programa\n");
+                            clientSocket.close();
                             break;
 
                         case 1:
-                            Conexao.enviar(socketClient, "Voce escolheu adicionar um novo funcionario\n");
-                            arrEmployees.add(new Employee(Conexao.receberInt(socketClient),Conexao.receber(socketClient), Conexao.receberFloat(socketClient)));
+                            System.out.println("Cliente enviou: " + escolhaRecebida + " - ADICIONAR");
+                            Conexao.enviar(clientSocket, "Você escolheu adicionar um novo funcionário\n");
+                            Employee emp = new Employee(Conexao.receberInt(clientSocket), Conexao.receber(clientSocket), Conexao.receberFloat(clientSocket));
+                            CrudServer.addEmployee(empNum, arrEmployees, emp, found, clientSocket);
                             break;
 
                         case 2:
-                            Conexao.enviar(socketClient, "Voce escolheu visualizar os funcionarios\n");
-                            Conexao.enviar(socketClient, arrEmployees.toString());
+                            System.out.println("Cliente enviou: " + escolhaRecebida + " - LISTAR");
+                            Conexao.enviar(clientSocket, "Você escolheu visualizar os funcionários\n");
+                            Conexao.enviar(clientSocket, arrEmployees.toString());
                             break;
 
                         case 3:
-                            Conexao.enviar(socketClient, "Voce escolheu procurar por um funcionario\n");
-                            empNum = Conexao.receberInt(socketClient);
-                            for (Iterator<Employee> i = arrEmployees.iterator(); i.hasNext(); ) {
-                                Employee e = i.next();
-                                if (e.getEmpID() == empNum) {
-                                    Conexao.enviar(socketClient, e.toString());
-                                    found = true;
-                                }
-                            }
+                            System.out.println("Cliente enviou: " + escolhaRecebida + " - PROCURAR");
+                            Conexao.enviar(clientSocket, "Você escolheu procurar por um funcionário\n");
+                            CrudServer.searchEmployee(empNum, arrEmployees, found, clientSocket);
                             break;
+
                         case 4:
-                            Conexao.enviar(socketClient, "Voce escolheu deletar um funcionario\n");
-                            empNum = Conexao.receberInt(socketClient); 
-                            for (Iterator<Employee> i = arrEmployees.iterator(); i.hasNext(); ) {
-                                Employee e = i.next();
-                                if (e.getEmpID() == empNum) {
-                                    i.remove();
-                                    found = true;
-                                }
-                            }
-                            if (!found) {
-                                Conexao.enviar(socketClient,"\nFuncionario não encontrado");
-                            } else {
-                                Conexao.enviar(socketClient,"\nFuncionario deletado com sucesso");
-                            } 
-                            //Conexao.enviar(socketClient,"Funcionario deletado com sucesso");
+                            System.out.println("Cliente enviou: " + escolhaRecebida + " - DELETAR");
+                            Conexao.enviar(clientSocket, "Você escolheu deletar um funcionário\n");
+                            CrudServer.deleteEmployee(empNum, arrEmployees, found, clientSocket);
                             break;
 
                         case 5:
-                            Conexao.enviar(socketClient, "Voce escolheu atualizar um funcionario\n");
-                            empNum = Conexao.receberInt(socketClient); 
-                            for (ListIterator<Employee> li = arrEmployees.listIterator(); li.hasNext(); ) {
-                                Employee e = li.next();
-                                if (e.getEmpID() == empNum) {
-                                    li.set(new Employee(empNum,Conexao.receber(socketClient), Conexao.receberFloat(socketClient)));
-                                    found = true;
-                                }
-                            }
-                            if (!found) {
-                                Conexao.enviar(socketClient,"Funcionario não encontrado");
-                            } else {
-                                //arrEmployees.add(new Employee(empNum,Conexao.receber(socketClient), Conexao.receberFloat(socketClient)));
-                                Conexao.enviar(socketClient,"Funcionario atualizado com sucesso");
-                            }
+                            System.out.println("Cliente enviou: " + escolhaRecebida + " - ATUALIZAR");
+                            Conexao.enviar(clientSocket, "Você escolheu atualizar um funcionário\n");
+                            CrudServer.updateEmployee(empNum, arrEmployees, found, clientSocket);
+                            break;
+
+                        case 6:
+                            System.out.println("Cliente enviou: " + escolhaRecebida + " - PROCURAR SALÁRIO");
+                            Conexao.enviar(clientSocket, "Você escolheu procurar funcionários por salário\n");
+                            CrudServer.searchBySalary(empNum, arrEmployees, found, clientSocket);
                             break;
 
                         default:
-                            Conexao.enviar(socketClient, "Opcao invalida, escolha um valor entre 0 e 5\n");
+                            Conexao.enviar(clientSocket, "Opção inválida, escolha um valor entre 0 e 5\n");
                             break;
                     }
-                    socketClient.close();
+                    clientSocket.close();
 
                 } catch (Exception e) {
                     String errorMsg = e.toString();
-                    Conexao.enviar(socketClient, errorMsg);
-                    socketClient.close();
+                    Conexao.enviar(clientSocket, errorMsg);
+                    clientSocket.close();
                 }
             }
         }
     }
 
-    /* public static class searchThread implements Runnable {
-        private final Socket socketClient;
-        private List<Employee> arrEmployees;
-
-        public searchThread(Socket socketClient, List<Employee> arrEmployees) {
-            this.socketClient = socketClient;
-            this.arrEmployees = arrEmployees;
-        }
-
-        @Override
-        public void run() {
-
-        }
-
-    } */
 }

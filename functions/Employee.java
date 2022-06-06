@@ -1,28 +1,28 @@
 package functions;
 public class Employee {
     private int empID;
-    private String employeeName;
-    private float salary;
+    private String empName;
+    private float empSalary;
 
-    public Employee(int empID, String employeeName, float salary) {
+    public Employee(int empID, String empName, float empSalary) {
         this.empID = empID;
-        this.employeeName = employeeName;
-        this.salary = salary;
+        this.empName = empName;
+        this.empSalary = empSalary;
     }
 
     public int getEmpID() {
         return empID;
     }
 
-    public float getSalary() {
-        return salary;
+    public float getEmpSalary() {
+        return empSalary;
     }
 
-    public String getEmployeeName() {
-        return employeeName;
+    public String getEmpName() {
+        return empName;
     }
 
     public String toString() {
-        return String.format("%d\t%s\t   R$%.2f",this.empID,this.employeeName,this.salary);
+        return String.format("%d\t%s\t   R$%.2f",this.empID,this.empName,this.empSalary);
     }
 }

@@ -7,21 +7,36 @@ import java.util.regex.Pattern;
 
 public interface Crud {
 
-    public static void showMenu() {
-        threadAux p1 = new threadAux();
+    public static void showMenu(threadAux p1) {
         new Thread(p1).start();
     }
 
+    public static void showEmpTypes() {
+        System.out.println("1. Estagiários [R$ 810,00   - R$ 1.400,00]");
+        System.out.println("2. Júnior      [R$ 2.000,00 - R$ 3.500,00]");
+        System.out.println("3. Pleno       [R$ 4.000,00 - R$ 5.000,00]");
+        System.out.println("4. Sênior      [R$ 5.500,00   em   diante]");
+        System.out.printf("\nDigite o número da opção: ");
+    }
+
+    public static void receiveEmployees(String textoRecebido) {
+        System.out.println("-----------------------------------");
+        System.out.println("ID\tName\t\tSalary");
+        String textoSplit[] = textoRecebido.split("\\[|,|\\]");
+        for (String t : textoSplit) {
+            System.out.println(t.trim());
+        }
+        System.out.println("-----------------------------------");
+    }
+
     public static int addID(Scanner scannAdd) {
-        // Caso o codigo quebre, redeclarar as variaveis eNum, eName e eSalary nas
-        // funcoes "Add"
         int eNum;
         try {
             System.out.printf("Insira o ID do funcionário: ");
             eNum = Integer.parseInt(scannAdd.nextLine());
             return eNum;
         } catch (NumberFormatException e) {
-            System.out.println("\nO ID deve conter apenas numeros. Tente um valor valido.");
+            System.out.println("\nO ID deve conter apenas números. Tente um valor válido.");
             return addID(scannAdd);
         }
     }
@@ -47,7 +62,7 @@ public interface Crud {
             System.out.printf("Insira o valor mensal pago ao funcionário: ");
             eSalary = Float.parseFloat(scannAdd.nextLine());
             if (eSalary < 810) {
-                System.out.println("\nPor favor insira um valor correspondente ou maior ao minimo mensal (R$810).");
+                System.out.println("\nPor favor insira um valor correspondente ou maior ao mínimo mensal (R$810).");
                 return addSalary(scannAdd);
             }
             return eSalary;
@@ -89,13 +104,14 @@ public interface Crud {
                 e.printStackTrace();
             }
             System.out.println("\n");
-            System.out.println("1.INSERIR NOVO FUNCIONARIO");
-            System.out.println("2.EXIBIR FUNCIONARIO");
-            System.out.println("3.PROCURAR FUNCIONARIO");
-            System.out.println("4.DELETAR FUNCIONARIO");
-            System.out.println("5.ATUALIZAR DADOS DO FUNCIONARIO");
-            System.out.println("0.SAIR");
-            System.out.printf("\nDigite o numero da opcao: ");
+            System.out.println("1. INSERIR NOVO FUNCIONÁRIO");
+            System.out.println("2. EXIBIR FUNCIONÁRIO");
+            System.out.println("3. PROCURAR FUNCIONÁRIO");
+            System.out.println("4. DELETAR FUNCIONÁRIO");
+            System.out.println("5. ATUALIZAR DADOS DO FUNCIONÁRIO");
+            System.out.println("6. PROCURAR FUNCIONÁRIO POR SALÁRIO");
+            System.out.println("0. SAIR");
+            System.out.printf("\nDigite o número da opção: ");
             this.stop();
         }
 
