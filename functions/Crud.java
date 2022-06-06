@@ -117,7 +117,7 @@ public interface Crud {
             }
             System.out.println("\n");
             System.out.println("1. INSERIR NOVO FUNCIONÁRIO");
-            System.out.println("2. EXIBIR FUNCIONÁRIO");
+            System.out.println("2. EXIBIR FUNCIONÁRIOS");
             System.out.println("3. PROCURAR FUNCIONÁRIO");
             System.out.println("4. DELETAR FUNCIONÁRIO");
             System.out.println("5. ATUALIZAR DADOS DO FUNCIONÁRIO");
