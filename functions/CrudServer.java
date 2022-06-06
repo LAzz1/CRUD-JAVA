@@ -60,6 +60,7 @@ public interface CrudServer {
                     break;
 
                 default:
+                    str = "---- Opção inválida ----";
                     break;
             }
         }

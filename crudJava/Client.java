@@ -89,8 +89,7 @@ public class Client implements Crud {
                     break;
 
                 case 6:
-                    Crud.showEmpTypes();
-                    Conexao.enviarInt(socket, Integer.parseInt(input.nextLine()));
+                    Conexao.enviarInt(socket, Crud.sendInt(input));
                     try {
                         textoRecebido = Conexao.receber(socket);
                         Crud.receiveEmployees(textoRecebido);

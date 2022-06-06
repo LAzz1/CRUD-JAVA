@@ -11,7 +11,7 @@ public interface Crud {
         new Thread(p1).start();
     }
 
-    public static void showEmpTypes() {
+    private static void showEmpTypes() {
         System.out.println("1. Estagiários [R$ 810,00   - R$ 1.400,00]");
         System.out.println("2. Júnior      [R$ 2.000,00 - R$ 3.500,00]");
         System.out.println("3. Pleno       [R$ 4.000,00 - R$ 5.000,00]");
@@ -82,6 +82,18 @@ public interface Crud {
         } catch (NumberFormatException e) {
             System.out.println("\nOcorreu um erro na validação do ID. Tente novamente apenas com numeros.");
             return searchEmployee(scannSearch);
+        }
+    }
+
+    public static int sendInt(Scanner scannSend) {
+        Crud.showEmpTypes();
+        scannSend = new Scanner(System.in);
+        try {
+            int choice = Integer.parseInt(scannSend.nextLine());
+            return choice;
+        } catch (NumberFormatException e) {
+            System.out.println("\nInsira apenas números: [ 1 -> 4]\n");
+            return sendInt(scannSend);
         }
     }
 
