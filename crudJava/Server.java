@@ -89,7 +89,7 @@ public class Server implements CrudServer {
                             break;
 
                         default:
-                            Conexao.enviar(clientSocket, "Opção inválida, escolha um valor entre 0 e 5\n");
+                            Conexao.enviar(clientSocket, "Opção inválida, escolha um valor entre 0 e 6\n");
                             break;
                     }
                     clientSocket.close();
